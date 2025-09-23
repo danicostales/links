@@ -1,0 +1,345 @@
+---
+import '../styles/global.css';
+import { SITE } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+}
+const {
+  title = SITE.title,
+  description = SITE.description,
+  canonical,
+} = Astro.props as Props;
+---
+
+<!doctype html>
+<html lang={SITE.lang} data-default-avatar-shape={SITE.avatarShape}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta name="generator" content="Astro" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0b0f19"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical ?? SITE.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={SITE.ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonical ?? SITE.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={SITE.ogImage} />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="canonical" href={canonical ?? SITE.url} />
+    <title>{title}</title>
+    <link
+      rel="preload"
+      as="image"
+      href="https://github.com/danicallero.png"
+      imagesrcset="https://github.com/danicallero.png"
+    />
+    <script>
+      (function () {
+        // theme: prefer stored value; if none, defer to system (no forced override)
+        try {
+          var t = localStorage.getItem('theme');
+        } catch (e) {
+          t = null;
+        }
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.dataset.theme = t;
+        }
+
+        // avatar shape: stored override wins, otherwise use server-side default from SITE
+        try {
+          var as = localStorage.getItem('avatarShape');
+        } catch (e) {
+          as = null;
+        }
+        var defaultShape =
+          document.documentElement.getAttribute('data-default-avatar-shape') ||
+          'circle';
+        var shape = as || defaultShape || 'circle';
+        document.documentElement.dataset.avatarShape = shape;
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="site-header">
+      <div class="inner">
+        <button
+          id="theme-toggle"
+          class="toggle"
+          aria-label="Toggle theme"
+          role="switch"
+          aria-checked="false"
+          type="button"
+          draggable="false"
+        >
+          <span class="track"></span>
+          <span class="thumb"></span>
+          <span class="icon sun" aria-hidden="true">☀️</span>
+          <span class="icon moon" aria-hidden="true">🌙</span>
+        </button>
+      </div>
+    </header>
+    <main class="site-main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div>© {new Date().getFullYear()} Daniel Callero.</div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .site-header {
+    padding: 1rem 0;
+  }
+  .site-header .inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 57px;
+    height: 30px;
+    border-radius: 999px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+    transition: background 0.25s ease;
+    line-height: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .track {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    backdrop-filter: saturate(120%);
+    pointer-events: none;
+  }
+  .thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--text-strong);
+    transform: translateX(0);
+    transition:
+      transform 0.25s ease,
+      background 0.25s ease;
+    z-index: 2;
+  }
+  .toggle.on .thumb {
+    transform: translateX(27px);
+    background: #f9fafb;
+  }
+  .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 14px;
+    text-align: center;
+    opacity: 0.75;
+    transition: opacity 0.25s ease;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+  .sun {
+    left: 7px;
+  }
+  .moon {
+    right: 7px;
+  }
+  .toggle.on .sun {
+    opacity: 0.4;
+  }
+  .toggle:not(.on) .moon {
+    opacity: 0.4;
+  }
+  .toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35);
+  }
+  .site-main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .site-footer {
+    text-align: center;
+    font-size: 0.875rem;
+    padding: 1rem 0;
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  (function () {
+    var KEY = 'theme';
+    function getStored() {
+      try {
+        return localStorage.getItem(KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+  function setStored(v) {
+      try {
+        localStorage.setItem(KEY, v);
+      } catch (e) {}
+    }
+    function prefersDark() {
+      return (
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+      );
+    }
+
+    function init() {
+      var root = document.documentElement;
+      var btn = document.getElementById('theme-toggle');
+
+  function apply(mode) {
+        root.setAttribute('data-theme', mode);
+        var isDark = mode === 'dark';
+        if (btn) {
+          try {
+            btn.setAttribute('aria-checked', String(isDark));
+            if (isDark) btn.classList.add('on');
+            else btn.classList.remove('on');
+          } catch (err) {}
+        }
+      }
+
+      function syncUIFromRoot() {
+        var mode = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        var isDark = mode === 'dark';
+        if (btn) {
+          btn.setAttribute('aria-checked', String(isDark));
+          if (isDark) btn.classList.add('on');
+          else btn.classList.remove('on');
+        }
+      }
+
+
+      var stored = getStored();
+      var initial;
+      if (stored === 'dark' || stored === 'light') {
+        initial = stored;
+      } else {
+        initial = prefersDark() ? 'dark' : 'light';
+      }
+      apply(initial);
+
+  /** @param {Event} [e] */
+      function toggleHandler(e) {
+        // Always allow toggling, regardless of system or initial mode
+        if (e && (e.type === 'touchend' || e.type === 'touchstart')) {
+          if (e.cancelable) e.preventDefault();
+        }
+        var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        var next = current === 'dark' ? 'light' : 'dark';
+        apply(next);
+        setStored(next);
+      }
+
+      if (btn && btn.addEventListener) {
+        btn.addEventListener('click', toggleHandler, false);
+        // Use touchend to align with a tap release
+        btn.addEventListener('touchend', toggleHandler, false);
+        btn.addEventListener('keydown', function (e) {
+          var key = e && (e.key || e.code);
+          if (key === 'Enter' || key === ' ' || key === 'Spacebar') {
+            if (e.preventDefault) e.preventDefault();
+            toggleHandler(e);
+          }
+        });
+      }
+
+      // Observe external mutations to data-theme
+      if (typeof MutationObserver === 'function') {
+        var observer = new MutationObserver(function (records) {
+          for (var i = 0; i < records.length; i++) {
+            var rec = records[i];
+            if (rec && rec.type === 'attributes' && rec.attributeName === 'data-theme') {
+              syncUIFromRoot();
+            }
+          }
+        });
+        observer.observe(root, { attributes: true });
+      }
+
+      var mql = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  /** @param {{matches?: boolean}} e */
+  function syncSystem(e) {
+        var matches = e && typeof e.matches === 'boolean' ? e.matches : false;
+        // Only update if user hasn't toggled (storage is empty)
+        var storedNow = getStored();
+        if (!storedNow) {
+          apply(matches ? 'dark' : 'light');
+        }
+      }
+      if (mql) {
+        if (typeof mql.addEventListener === 'function') {
+          mql.addEventListener('change', syncSystem);
+        } else if (typeof mql.addListener === 'function') {
+          mql.addListener(syncSystem);
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>

@@ -1,0 +1,152 @@
+@import 'tailwindcss';
+@import 'tailwindcss/preflight';
+@import 'tailwindcss/utilities';
+
+:root {
+  --bg: linear-gradient(135deg, #fbfdff 0%, #fffaf8 100%);
+  --text: #111827;
+  --text-strong: #061025;
+  --text-muted: #475569;
+  --border: rgba(6, 16, 37, 0.06);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(6, 16, 37, 0.06);
+  --logo-dark-bg: #0b1220;
+  --badge-bg: #eef2ff;
+  --badge-fg: #3730a3;
+  --accent: #6d28d9; /* used for links and accents */
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --shadow-sm: 0 4px 14px rgba(13, 20, 32, 0.06);
+  --shadow-lg: 0 12px 30px rgba(13, 20, 32, 0.08);
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Respect system preference before JS runs */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: radial-gradient(
+      1200px 800px at 10% 10%,
+      #0b1020 0%,
+      #0b0f19 40%,
+      #070b14 100%
+    );
+    --text: #e5e7eb;
+    --text-strong: #ffffff;
+    --text-muted: #9ca3af;
+    --border: rgba(255, 255, 255, 0.12);
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --logo-dark-bg: #0b1220;
+    --badge-bg: rgba(79, 70, 229, 0.2);
+    --badge-fg: #c7d2fe;
+    color-scheme: dark;
+  }
+}
+
+html[data-theme='dark'] {
+  --bg: radial-gradient(
+    1200px 800px at 10% 10%,
+    #0b1020 0%,
+    #0b0f19 40%,
+    #070b14 100%
+  );
+  --text: #e5e7eb;
+  --text-strong: #ffffff;
+  --text-muted: #9ca3af;
+  --border: rgba(255, 255, 255, 0.12);
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --logo-dark-bg: #0b1220;
+  --badge-bg: rgba(79, 70, 229, 0.2);
+  --badge-fg: #c7d2fe;
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+}
+.container {
+  max-width: 960px;
+}
+
+/* Avatar shapes */
+.avatar {
+  width: 96px;
+  height: 96px;
+  display: inline-block;
+  overflow: hidden;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.02);
+  line-height: 0;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Control avatar shape at runtime */
+html[data-avatar-shape='circle'] .avatar {
+  border-radius: 9999px;
+}
+html[data-avatar-shape='rounded'] .avatar {
+  border-radius: 18px;
+}
+html[data-avatar-shape='hexagon'] .avatar {
+  -webkit-clip-path: polygon(
+    25% 6.7%,
+    75% 6.7%,
+    100% 50%,
+    75% 93.3%,
+    25% 93.3%,
+    0% 50%
+  );
+  clip-path: polygon(
+    25% 6.7%,
+    75% 6.7%,
+    100% 50%,
+    75% 93.3%,
+    25% 93.3%,
+    0% 50%
+  );
+}
+
+.group-header {
+  border-left-width: 6px;
+}
+
+/* Global link styles */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+}
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.badge {
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}

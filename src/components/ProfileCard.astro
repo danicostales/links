@@ -1,0 +1,111 @@
+---
+import { PROFILE, SOCIAL } from '../data/profile';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  avatar?: string;
+  name?: string;
+  tagline?: string;
+  location?: string;
+}
+
+const p = { ...PROFILE, ...(Astro.props as Props) };
+---
+
+<section class="profile">
+  <div class="avatar">
+    <img src={p.avatar} alt={p.name} width="128" height="128" />
+  </div>
+  <div class="meta">
+    <h1 class="name">{p.name}</h1>
+    <p class="tag">{p.tagline}</p>
+    {p.location && <p class="loc">{p.location}</p>}
+  </div>
+  <nav aria-label="Social links" class="social">
+    {
+      SOCIAL.map((link) => (
+        <a
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="item"
+          title={link.name}
+          aria-label={link.name}
+        >
+          <Icon name={link.icon} class="icon" />
+          <span class="sr-only">{link.name}</span>
+        </a>
+      ))
+    }
+  </nav>
+</section>
+
+<style>
+  .profile {
+    text-align: center;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .avatar {
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto;
+    box-shadow: var(--shadow-sm);
+    border: 3px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-lg);
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  .name {
+    font-size: 1.75rem;
+    line-height: 2rem;
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+  .tag {
+    color: var(--text);
+    opacity: 0.9;
+  }
+  .loc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+  .social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+  .item {
+    color: var(--text);
+    opacity: 0.9;
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease;
+  }
+  .item:hover {
+    color: var(--text-strong);
+    opacity: 1;
+  }
+  .icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

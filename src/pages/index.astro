@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProfileCard from '../components/ProfileCard.astro';
+import LinkGrid from '../components/LinkGrid.astro';
+import { LINK_GROUPS } from '../data/links';
+import { SITE } from '../data/site';
+---
+
+<Layout title={SITE.title} description={SITE.description}>
+  <div class="stack">
+    <ProfileCard />
+    <hr class="divider" />
+    <LinkGrid groups={LINK_GROUPS} />
+  </div>
+</Layout>
+
+<style>
+  .stack {
+    width: 100%;
+    text-align: center;
+    max-width: 42rem;
+    margin-inline: auto;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .divider {
+    border: none;
+    height: 1px;
+    background: var(--border);
+    margin: 1rem auto 0;
+    width: min(100%, 28rem);
+  }
+</style>
