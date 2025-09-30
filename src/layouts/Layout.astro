@@ -59,9 +59,11 @@ const {
     />
     <script>
       (function () {
-        // theme: prefer stored value; if none, defer to system (no forced override)
+        // theme: default to system each new visit; only respect a session choice
+        try { localStorage.removeItem('theme'); } catch (e) {}
+        var t = null;
         try {
-          var t = localStorage.getItem('theme');
+          t = sessionStorage.getItem('theme');
         } catch (e) {
           t = null;
         }
@@ -226,14 +228,14 @@ const {
     var KEY = 'theme';
     function getStored() {
       try {
-        return localStorage.getItem(KEY);
+        return sessionStorage.getItem(KEY);
       } catch (e) {
         return null;
       }
     }
   function setStored(v) {
       try {
-        localStorage.setItem(KEY, v);
+        sessionStorage.setItem(KEY, v);
       } catch (e) {}
     }
     function prefersDark() {
@@ -279,11 +281,11 @@ const {
       }
       apply(initial);
 
-  /** @param {Event} [e] */
+  /** @param {Event & {pointerType?: string}} [e] */
       function toggleHandler(e) {
         // Always allow toggling, regardless of system or initial mode
-        if (e && (e.type === 'touchend' || e.type === 'touchstart')) {
-          if (e.cancelable) e.preventDefault();
+        if (e && e.type === 'pointerup' && e.cancelable) {
+          e.preventDefault();
         }
         var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
         var next = current === 'dark' ? 'light' : 'dark';
@@ -292,9 +294,8 @@ const {
       }
 
       if (btn && btn.addEventListener) {
-        btn.addEventListener('click', toggleHandler, false);
-        // Use touchend to align with a tap release
-        btn.addEventListener('touchend', toggleHandler, false);
+        // Use a single pointer event to avoid duplicate click+touch firing
+        btn.addEventListener('pointerup', toggleHandler, false);
         btn.addEventListener('keydown', function (e) {
           var key = e && (e.key || e.code);
           if (key === 'Enter' || key === ' ' || key === 'Spacebar') {

@@ -21,9 +21,9 @@
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
-/* Respect system preference before JS runs */
+/* Respect system preference only when no explicit theme is set */
 @media (prefers-color-scheme: dark) {
-  :root {
+  html:not([data-theme]) {
     --bg: radial-gradient(
       1200px 800px at 10% 10%,
       #0b1020 0%,
@@ -60,6 +60,21 @@ html[data-theme='dark'] {
   --badge-bg: rgba(79, 70, 229, 0.2);
   --badge-fg: #c7d2fe;
   color-scheme: dark;
+}
+
+/* Explicit light-mode override so user choice wins over system dark */
+html[data-theme='light'] {
+  --bg: linear-gradient(135deg, #fbfdff 0%, #fffaf8 100%);
+  --text: #111827;
+  --text-strong: #061025;
+  --text-muted: #475569;
+  --border: rgba(6, 16, 37, 0.06);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(6, 16, 37, 0.06);
+  --logo-dark-bg: #0b1220;
+  --badge-bg: #eef2ff;
+  --badge-fg: #3730a3;
+  color-scheme: light;
 }
 
 html,
