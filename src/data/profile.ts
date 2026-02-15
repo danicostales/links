@@ -1,6 +1,6 @@
 export const PROFILE = {
-  avatar: 'https://github.com/danicallero.png',
-  name: 'Daniel Callero',
+  avatar: 'https://github.com/danicostales.png',
+  name: 'Daniel Costales',
   tagline: '',
   location: 'A Coruña',
   avatarShape: undefined as 'circle' | 'rounded' | 'hexagon' | undefined,
@@ -21,7 +21,7 @@ export const SOCIAL = [
     icon: 'mdi:linkedin',
     url: 'https://es.linkedin.com/in/daniel-callero-costales-807252270',
   },
-  { name: 'Email', icon: 'mdi:email', url: 'mailto:contact@danicallero.es' },
+  { name: 'Email', icon: 'mdi:email', url: 'mailto:contact@danicostales.es' },
   { name: 'PayPal', icon: 'mdi:paypal', url: 'https://paypal.me/danicalleroo' },
 ] as const;
 
